@@ -1,0 +1,9 @@
+project: ansible
+region: ap-northeast-1
+
+# User deploy
+deploy_user: deploy
+
+# roles/base
+base_timezone: Asia/Tokyo
+base_maxopenfile: 65535

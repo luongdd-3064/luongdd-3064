@@ -1,0 +1,9 @@
+- hosts: tag_Role_dev
+
+  remote_user: "{{ ansible_ssh_user }}"
+  become_method: sudo
+  gather_facts: yes
+
+  roles:
+    - mounts3
+    - install_sftp

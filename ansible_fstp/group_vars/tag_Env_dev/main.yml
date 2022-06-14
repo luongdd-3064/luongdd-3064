@@ -1,0 +1,19 @@
+env: dev
+full_env: development
+domain: 'base18.sun-asterisk.vn'
+
+# Mount S3 to bastion
+ansible_ssh_user: "ubuntu"
+deploy_user: "test1"
+mdir_mout_s3: "/demo-fstp-dir"
+passwd_s3fs_path: "/root/.passwd-s3fs"
+AWS_ACCESS_KEY_ID: "AKIATHKHMO4MTNDAFF7E"
+AWS_SECRET_KEY_ID: "z7ioYHxBN179YlQDeLUP+mlfQgsoyYqf9Tn3ADka"
+region: "ap-northeast-1"
+bucketname: "demo-sftp-1234"
+
+# Variables for SFTP
+local_root: "/demo-fstp-dir/"
+userlist_file: "/etc/vsftpd.userlist"
+username: "user1" # username for OS user
+password: "user1"  # password for OS user

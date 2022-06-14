@@ -1,0 +1,49 @@
+---
+# tasks file for install_sftp
+- name: Install vsftpd  (state=present is optional)
+  apt:
+    name: vsftpd
+    state: present
+  become: yes
+- name: copy vsftpd.conf to server
+  template:
+    src: vsftpd.conf 
+    dest: "/etc/vsftpd.conf"
+    owner: root
+    group: root
+    mode: "0600"
+  become: yes
+- name: "Restart vsftpd service"
+  become: yes
+  shell: "{{ item }}"
+  with_items:
+    - systemctl restart vsftpd
+- name: copy sshd_config to server
+  template:
+    src: sshd_config
+    dest: "/etc/ssh/sshd_config"
+    owner: root
+    group: root
+    mode: "0600"
+  become: yes
+- name: Restart service sshd
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+  become: yes
+- name: create user fstp
+  user: name={{username}} password={{password}} shell=/sbin/nologin
+  become: yes
+- name: Check if the fstp user has been created
+  shell: cat /etc/vsftpd.userlist | grep {{username}}
+  register: check_user
+  failed_when: check_user.rc == 0 and ("unrecognized service" not in check_user.stderr)
+  ignore_errors: yes
+  become: yes
+
+- name: "Allow user access fstp if not exists"
+  become: yes
+  shell: "{{ item }}"
+  with_items:
+    - echo "{{username}}" | sudo tee -a /etc/vsftpd.userlist
+  when: "check_user.rc != 0"

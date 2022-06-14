@@ -1,0 +1,45 @@
+# tasks file for test
+- name: "update ubuntu"
+  become: yes
+  shell: "{{ item }}"
+  with_items:
+    - apt update -y
+- name: Install s3fs   (state=present is optional)
+  apt:
+    name: s3fs
+    state: present
+  become: yes
+- name: Create directory to mount to S3
+  file:
+    path: "{{ mdir_mout_s3 }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  ignore_errors: yes
+  become: yes
+- name: update {{ passwd_s3fs_path }} file to save access key and secret key for aws account
+  template:
+    src: .passwd-s3fs
+    dest: "{{ passwd_s3fs_path }}"
+    owner: root
+    group: root
+    mode: "0600"
+  become: yes
+# Check lai
+- name: Check already mount s3 to directory
+  shell: mount|grep s3fs
+  register: check_mount
+  failed_when: check_mount.rc == 0 and ("unrecognized service" not in check_mount.stderr)
+  ignore_errors: yes
+- name: "Mount S3 into {{ mdir_mout_s3 }}"
+  become: yes
+  shell: "{{ item }}"
+  with_items:
+    - sudo s3fs {{ bucketname }} {{ mdir_mout_s3 }} -o passwd_file={{ passwd_s3fs_path }},nonempty,rw,allow_other,mp_umask=002,uid=1000,gid=1000 -o url=http://s3.{{region}}.amazonaws.com,endpoint={{region}},use_path_request_style
+  when: "check_mount.rc != 0"
+- name: "update /etc/fstab file"
+  become: yes
+  shell: "{{ item }}"
+  with_items:
+    - echo "{{bucketname}} {{mdir_mout_s3}} fuse.s3fs _netdev,allow_other 0 0" >> /etc/fstab
