@@ -1,0 +1,27 @@
+env: dev
+full_env: development
+domain: 'base18.sun-asterisk.vn'
+
+# Mount S3 to bastion
+ansible_ssh_user: "ubuntu"
+deploy_user: "test1"
+mdir_mout_s3: "/demo-fstp-dir"
+passwd_s3fs_path: "/root/.passwd-s3fs"
+AWS_ACCESS_KEY_ID: "AKIATHKHMO4MTNDAFF7E"
+AWS_SECRET_KEY_ID: "z7ioYHxBN179YlQDeLUP+mlfQgsoyYqf9Tn3ADka"
+region: "ap-northeast-1"
+bucketname: "demo-sftp-1234"
+
+# Variables for SFTP
+local_root: "/demo-fstp-dir/"
+userlist_file: "/etc/vsftpd.userlist"
+username: "user1" # username for OS user
+password: "user1"  # password for OS user
+
+# ssh_user
+group_list:
+  - admin
+  - dev
+user_lists:
+  - { user_name: "dinh.dai.luong", groups_name: "dev" , authorized_keys: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC6sZGWeYkVh4irh2BQ23pnOPh+iwe8sbr4DLNwItyBgFHQsRACkrJZEnFbEQz20uud5+LTgUYOM+9/HSV2mqttdNIG091xO6htjX7dvu4dl7dDWb6sMdrtXc7hPvHVBiYtlrf2xO+rcDIryj6wBHLUi02AYzWvxNf8kZKn/6fc3HyMyHIIuFNB28fYcrnkgaK3CuTLaUMy61oipoq+/Kcr1f2x1Bb3yIEf93aE3HlC36R67nUWarXApiQmiz0PT9R4JVlW6v6WcVItgrZ5/NmG0tnVUZiPnIRHNbkT3aRLeWADWUe0lJnBzEHWZe+DjYwLc+3kMYACP/Ag/VFcmhHExaaN7UZMrORmxKdPjivXjAd83WBwsHnV//dRtYTOXLX62rtIRqSASd/KRiG7IIsdH55HbJpJe8BjYtlPyIFJJn6iNKFpOrt5dLfshSX/HpFHvM9YB7uEGPTG6F3TkvtF4BlreVjx5plDiuuhfwJLWoAWwNXbzoCn/7cz9GPSSuE= root@b123064-lt" }
+  - { user_name: "pham.van.duc", groups_name: "admin" , authorized_keys: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC6sZGWeYkVh4irh2BQ23pnOPh+iwe8sbr4DLNwItyBgFHQsRACkrJZEnFbEQz20uud5+LTgUYOM+9/HSV2mqttdNIG091xO6htjX7dvu4dl7dDWb6sMdrtXc7hPvHVBiYtlrf2xO+rcDIryj6wBHLUi02AYzWvxNf8kZKn/6fc3HyMyHIIuFNB28fYcrnkgaK3CuTLaUMy61oipoq+/Kcr1f2x1Bb3yIEf93aE3HlC36R67nUWarXApiQmiz0PT9R4JVlW6v6WcVItgrZ5/NmG0tnVUZiPnIRHNbkT3aRLeWADWUe0lJnBzEHWZe+DjYwLc+3kMYACP/Ag/VFcmhHExaaN7UZMrORmxKdPjivXjAd83WBwsHnV//dRtYTOXLX62rtIRqSASd/KRiG7IIsdH55HbJpJe8BjYtlPyIFJJn6iNKFpOrt5dLfshSX/HpFHvM9YB7uEGPTG6F3TkvtF4BlreVjx5plDiuuhfwJLWoAWwNXbzoCn/7cz9GPSSuE= root@b123064-lt" }

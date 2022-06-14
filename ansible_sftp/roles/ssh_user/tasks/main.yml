@@ -1,0 +1,48 @@
+---
+# tasks file for ssh_user
+- group:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ group_list }}"
+# Create & config ssh user
+- name: Create ssh user
+  user:
+    name: "{{ item.user_name }}"
+    groups: "{{ item.groups_name }}"
+    shell: /bin/bash
+    append: yes
+    createhome: yes
+  loop: "{{ user_lists }}"
+  become: yes
+- name: Create folder .ssh
+  file:
+    path: /home/{{ item.user_name }}/.ssh
+    state: directory
+    owner: "{{ item.user_name }}"
+    group: "{{ item.user_name }}"
+    mode: 0700
+  loop: "{{ user_lists }}"
+  become: yes
+- name: Configuring authorized_keys
+  copy:
+    content: "{{ item.authorized_keys }}"
+    dest: /home/{{ item.user_name }}/.ssh/authorized_keys
+    owner: "{{ item.user_name }}"
+    group: "{{ item.user_name }}"
+    mode: 0600
+  loop: "{{ user_lists }}"
+  become_user: '{{ item.user_name }}'
+  become: yes
+
+# - name: Execute the command in remote shell; stdout goes to the specified file on the remote.
+#   shell: echo {{ item.user_name }} > /test.txt
+#   loop: "{{ user_lists }}"
+#   become: yes
+- name: Allow user sudo without password that belongs to admin group
+  lineinfile:
+    path: /etc/sudoers
+    line: "{{ item.user_name }} ALL=(ALL) NOPASSWD:ALL"
+    validate: 'visudo -cf %s'
+  loop: "{{ user_lists }}"
+  when: item.groups_name == "admin"
+  become: yes

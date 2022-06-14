@@ -1,5 +1,0 @@
-[tag_Role_dev]
-35.77.101.206  ansible_ssh_private_key_file=/root/.ssh/tokyo_kp.pem
-#10.100.131.144   ansible_ssh_user=root   ansible_ssh_pass=12345a@       ansible_sudo_pass=12345a@
-[tag_Env_dev:children]
-tag_Role_dev
